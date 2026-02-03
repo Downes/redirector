@@ -1,0 +1,12 @@
+services:
+  redirector:
+    build: .
+    restart: unless-stopped
+    volumes:
+      - /srv/www:/srv/www:ro
+    networks:
+      - web
+
+networks:
+  web:
+    external: true
