@@ -72,4 +72,37 @@ From the server:
     cd /srv/apps/redirector
     git pull origin main
 
-Then reload/restart the service (depends on how it is run on this server).
+Then reload/restart the service
+
+### Restarting the service
+
+The redirector runs in Docker via Docker Compose using Starman.
+
+After updating code:
+
+    docker compose restart redirector
+
+This fully restarts the PSGI process and reloads `app.psgi`.
+
+
+## PSGI runtime
+
+This service runs as a PSGI application.
+
+The entry point is:
+
+    app.psgi
+
+`app.psgi` loads the redirector code and returns the `$app` code reference.
+
+The application is typically run behind a reverse proxy using a PSGI server
+such as `plackup`, `starman`, or `uwsgi`.
+
+After updating code:
+
+- Reload or restart the PSGI process (method depends on your process manager)
+- No redirect data reload is required; redirect files are read on demand
+
+The application is stateless. All redirect state lives on disk under `/srv/www`.
+
+
